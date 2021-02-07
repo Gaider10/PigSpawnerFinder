@@ -33,8 +33,8 @@ jobs:
         arguments: build
     - name: Run strip-nondeterminism on built .jar files
       run: strip-nondeterminism build/libs/*.jar
-    - name: Run advzip (-i 999) on built .jar files
-      run: advzip --shrink-insane -kzi 999 -p build/libs/*.jar
+    - name: Run advzip (-i 99) on built .jar files
+      run: advzip --shrink-insane -kzi 99 -p build/libs/*.jar
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
