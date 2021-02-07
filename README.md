@@ -1,4 +1,4 @@
 # PigSpawnerFinder
 Finds seeds with pig spawners
 
-if you want to run this you also need KaptainWutax's BiomesUtils, SeedUtils and MathUtils libraries
+To use, first build the project with Gradle, and then run the built .jar file PigSpawnerFinder-all.jar in ./build/libs.
