@@ -17,8 +17,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-
 public class PigSpawnerFromWorldSeed {
+
 	// this is non optimized
 	public static void main(String[] args) {
 
@@ -53,6 +53,8 @@ public class PigSpawnerFromWorldSeed {
 		}
 		System.out.println("We are done, if you didn't see any STEP X (from 1 to 3, 3 being the final true one)\n" +
 				"Then you have a non possible worldseed or a too small of an area, remember those are rare.");
+		System.out.println("Press any key to quit");
+		String end = scanner.nextLine();
 	}
 
 

@@ -1,9 +1,12 @@
 plugins {
     id 'java'
-    id 'application'
+    id "application"
+    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id 'edu.sc.seis.launch4j' version '2.5.0'
 }
 
-defaultTasks 'clean', 'run'
+
+defaultTasks 'clean', 'release', 'run'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -35,7 +38,7 @@ compileJava {
 }
 
 application {
-    mainClass.set("PigSpawnerFinder.PigSpawnerFinder")
+    mainClass.set("PigSpawnerFinder.PigSpawnerFromWorldSeed")
 }
 
 test {
@@ -53,12 +56,29 @@ test {
     }
 }
 
-jar {
-    manifest {
-        attributes "Main-Class": project.hasProperty("mainClass") ? project.getProperty("mainClass") : "PigSpawnerFinder"
-    }
 
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+shadowJar {
+    archiveFileName = "${project.name}-${project.version}.jar"
+}
+
+launch4j {
+    outfile = "${project.name}-${project.version}.exe"
+    icon = "${projectDir}/icon.ico"
+    outputDir = "libs"
+    supportUrl = "https://github.com/hube12/PigSpawnerFinder/issues"
+    jvmOptions = ["-Xms256M", "-Xmx8G"]
+    initialHeapPercent = 5
+    maxHeapPercent = 80
+    jarTask = project.tasks.shadowJar
+    productName = "PigSpawnerFinder"
+    fileDescription = "A lightning fast duplicated pig spawner finder"
+    copyConfigurable = [] // don't copy lib
+    libraryDir= "ignore_libs"
+    dontWrapJar=false
+    headerType="console"
+}
+
+task("release"){
+    dependsOn(shadowJar)
+    dependsOn(createExe)
 }
