@@ -12,4 +12,15 @@ public class Spawner {
         this.direction = direction;
         this.length = length;
     }
+
+    @Override
+    public String toString() {
+        return "Spawner{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", direction=" + direction +
+                ", length=" + length +
+                '}';
+    }
 }
