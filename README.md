@@ -9,6 +9,11 @@ You can double click the .exe to run the console and input the seed and the size
 as following : `java -jar PigSpawnerFinder-1.0.0.jar` 
 
 
+First input is world seed (eg -2464334185163669257)
+Second input is the number of chunk to search for in each direction (eg 1200 which means 1200 chunks or 2400x2400 chunks centered on 0,0 or 38400*38400 blocks centered on 0,0)
+
+STEP 1 means the spawner is there, STEP 2 means the buried treasure is at the spawner position, STEP 3 means the biomes did match so the spawner and buried treasure did generate. **Until STEP 3 there is no guarantee that the spawner will be a pig one**
+
 Example of input sequence (<<< means we entered a sequence of character)
 
 ```shell
