@@ -17,8 +17,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import static PigSpawnerFinder.PigSpawnerFinder.processCarverSeed;
-
 
 public class PigSpawnerFromWorldSeed {
 	// this is non optimized
@@ -49,13 +47,9 @@ public class PigSpawnerFromWorldSeed {
 		for (int chunkX = -size; chunkX < size; chunkX++) {
 			int finalChunkX = chunkX;
 			long finalWorldSeed = worldSeed;
-//			IntStream.range(-size, size).parallel().forEach(
-//					chunkZ -> processForChunk(finalWorldSeed, finalChunkX, chunkZ)
-//			);
-
-			for (int chunkZ = -size; chunkZ < size; chunkZ++) {
-				processForChunk(-2464334185163669257L, finalChunkX, chunkZ);
-			}
+			IntStream.range(-size, size).parallel().forEach(
+					chunkZ -> processForChunk(finalWorldSeed, finalChunkX, chunkZ)
+			);
 		}
 		System.out.println("We are done, if you didn't see any STEP X (from 1 to 3, 3 being the final true one)\n" +
 				"Then you have a non possible worldseed or a too small of an area, remember those are rare.");
@@ -63,7 +57,6 @@ public class PigSpawnerFromWorldSeed {
 
 
 	public static void processForChunk(long worldSeed, int chunkX, int chunkZ) {
-		System.out.println(chunkX+ " "+chunkZ);
 		ArrayList<Spawner> spawners = new ArrayList<>();
 		// get the spawner from the mineshaft
 		ArrayList<StructurePiece> pieces = MineshaftGenerator.generateForChunk(
