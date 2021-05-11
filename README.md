@@ -32,3 +32,8 @@ Then you have a non possible worldseed or a too small of an area, remember those
 Press any key to quit
 <<< Enter
 ```
+
+
+## Development
+
+Run `./gradlew release` to make both jar and exe in build/libs
