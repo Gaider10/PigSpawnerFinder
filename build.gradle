@@ -35,7 +35,7 @@ compileJava {
 }
 
 application {
-    mainClass.set("PigSpawnerFinder")
+    mainClass.set("PigSpawnerFinder.PigSpawnerFinder")
 }
 
 test {
