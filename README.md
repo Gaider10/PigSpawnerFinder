@@ -5,6 +5,8 @@ Based on the code by Andrew https://github.com/Gaider10/PigSpawnerFinder
 
 Head to [Releases](https://github.com/hube12/PigSpawnerFinder/releases) to download the .exe
 
+Install Java if you don't have it: https://www.java.com/fr/download/
+
 You can double click the .exe to run the console and input the seed and the size or use the jar 
 as following : `java -jar PigSpawnerFinder-1.0.0.jar` 
 
