@@ -66,7 +66,7 @@ launch4j {
     icon = "${projectDir}/icon.ico"
     outputDir = "libs"
     supportUrl = "https://github.com/hube12/PigSpawnerFinder/issues"
-    jvmOptions = ["-Xms256M", "-Xmx8G"]
+    jvmOptions = ["-Xms256M", "-Xmx1G"]
     initialHeapPercent = 5
     maxHeapPercent = 80
     jarTask = project.tasks.shadowJar
