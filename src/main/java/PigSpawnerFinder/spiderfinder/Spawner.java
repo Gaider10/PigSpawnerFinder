@@ -22,6 +22,6 @@ public class Spawner {
                 ", direction=" + direction +
                 ", length=" + length +
                 '}'
-                + String.format("/tp @p %d %d %d", x,y,z);
+                + String.format(" /tp @p %d %d %d", x,y,z);
     }
 }
