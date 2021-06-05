@@ -15,13 +15,6 @@ public class Spawner {
 
     @Override
     public String toString() {
-        return "Spawner{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                ", direction=" + direction +
-                ", length=" + length +
-                '}'
-                + String.format(" /tp @p %d %d %d", x,y,z);
+        return String.format(" /tp @p %d %d %d", x,y,z);
     }
 }

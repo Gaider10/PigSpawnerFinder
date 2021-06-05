@@ -3,6 +3,8 @@ package PigSpawnerFinder;
 import PigSpawnerFinder.spiderfinder.*;
 import kaptainwutax.biomeutils.biome.Biomes;
 import kaptainwutax.biomeutils.source.OverworldBiomeSource;
+import kaptainwutax.featureutils.Feature;
+import kaptainwutax.featureutils.structure.Mineshaft;
 import kaptainwutax.mcutils.rand.ChunkRand;
 import kaptainwutax.mcutils.rand.seed.WorldSeed;
 import kaptainwutax.mcutils.util.pos.BPos;
@@ -11,10 +13,7 @@ import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedutils.lcg.LCG;
 import kaptainwutax.terrainutils.terrain.OverworldChunkGenerator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class PigSpawnerFromWorldSeed {
@@ -201,10 +200,30 @@ public class PigSpawnerFromWorldSeed {
 		OverworldBiomeSource biomeSource;
 		OverworldChunkGenerator chunkGenerator;
 		CPos spawnerChunkPos = spawnerPos.toChunkPos();
+		ChunkRand rand=new ChunkRand();
+		Mineshaft mineshaft=new Mineshaft(version);
+		List<CPos> mineshaftList =new ArrayList<>();
+				// mineshaft can go as far as 112 blocks so that would be 7 chunks
+		for (int offX = -7; offX <= 7; offX++) {
+			for (int offZ = -7; offZ <= 7; offZ++) {
+				CPos current=spawnerChunkPos.add(offX,offZ);
+				Feature.Data<?> data=mineshaft.at(current.getX(),current.getZ());
+				if (mineshaft.canStart(data,worldSeed,rand)){
+					mineshaftList.add(current);
+				}
+			}
+		}
+		if (mineshaftList.isEmpty())return;
 		//Check biomes
 		biomeSource = new OverworldBiomeSource(version, worldSeed);
 		// those two checks are super intensive, that's why we do it at last
-		if (!BADLANDS.contains(biomeSource.getBiomeForNoiseGen((spawnerChunkPos.getX() << 2) + 2, 0, (spawnerChunkPos.getZ() << 2) + 2).getId())) return;
+		boolean oneTrueAtLeast=false;
+		for (CPos mineshaftCPos:mineshaftList){
+			if (BADLANDS.contains(biomeSource.getBiomeForNoiseGen((mineshaftCPos.getX() << 2) + 2, 0, (mineshaftCPos.getZ() << 2) + 2).getId())){
+				oneTrueAtLeast=true;
+			}
+		}
+		if (!oneTrueAtLeast)return;
 		if (biomeSource.getBiomeForNoiseGen((spawnerChunkPos.getX() << 2) + 2, 0, (spawnerChunkPos.getZ() << 2) + 2) != Biomes.BEACH) return;
 //            System.out.println("Good biomes: " + worldSeed);
 
