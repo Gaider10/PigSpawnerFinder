@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 public class PigSpawnerFromWorldSeed {
-
+	public static final MCVersion version=MCVersion.v1_16_5;
 	// this is non optimized
 	public static void main(String[] args) {
 
@@ -124,14 +124,14 @@ public class PigSpawnerFromWorldSeed {
 
 
 		//Check for buried treasure
-		rand.setRegionSeed(structureSeed, spawnerChunkX, spawnerChunkZ, 10387320, MCVersion.v1_16);
+		rand.setRegionSeed(structureSeed, spawnerChunkX, spawnerChunkZ, 10387320, version);
 		if (rand.nextFloat() >= 0.01F) return;
 
 
 		//Check for cobwebs and spawner position
 		//The spawner piece is the first corridor piece generated in this chunk so there are no random calls before it
 		// the index and step are super specific to 1.16 (please document yourself)
-		rand.setDecoratorSeed(structureSeed, spawnerChunkX << 4, spawnerChunkZ << 4, 0, 3, MCVersion.v1_16);
+		rand.setDecoratorSeed(structureSeed, spawnerChunkX << 4, spawnerChunkZ << 4, 0, 3, version);
 
 		//   skip ceiling air blocks
 		rand.advance(skipCeiling);
@@ -156,7 +156,7 @@ public class PigSpawnerFromWorldSeed {
 
 		//Check for no cobwebs near the spawner
 		// the index and step are super specific to 1.16 (please document yourself)
-		rand.setDecoratorSeed(structureSeed, spawnerChunkX << 4, spawnerChunkZ << 4, 0, 3, MCVersion.v1_16);
+		rand.setDecoratorSeed(structureSeed, spawnerChunkX << 4, spawnerChunkZ << 4, 0, 3, version);
 		rand.advance(skipCeiling);
 
 		boolean hasCobwebsNearby = false;
@@ -202,9 +202,9 @@ public class PigSpawnerFromWorldSeed {
 		OverworldChunkGenerator chunkGenerator;
 		CPos spawnerChunkPos = spawnerPos.toChunkPos();
 		//Check biomes
-		biomeSource = new OverworldBiomeSource(MCVersion.v1_16, worldSeed);
+		biomeSource = new OverworldBiomeSource(version, worldSeed);
 		// those two checks are super intensive, that's why we do it at last
-		if (!BADLANDS.contains(biomeSource.getBiomeForNoiseGen((spawnerChunkPos.getX() << 2) + 2, 0, (spawnerChunkPos.getX() << 2) + 2).getId())) return;
+		if (!BADLANDS.contains(biomeSource.getBiomeForNoiseGen((spawnerChunkPos.getX() << 2) + 2, 0, (spawnerChunkPos.getZ() << 2) + 2).getId())) return;
 		if (biomeSource.getBiomeForNoiseGen((spawnerChunkPos.getX() << 2) + 2, 0, (spawnerChunkPos.getZ() << 2) + 2) != Biomes.BEACH) return;
 //            System.out.println("Good biomes: " + worldSeed);
 
