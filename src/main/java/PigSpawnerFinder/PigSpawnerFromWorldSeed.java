@@ -13,6 +13,8 @@ import kaptainwutax.mcutils.version.MCVersion;
 import kaptainwutax.seedutils.lcg.LCG;
 import kaptainwutax.terrainutils.terrain.OverworldChunkGenerator;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -249,5 +251,17 @@ public class PigSpawnerFromWorldSeed {
 
 		System.out.printf("STEP 3 (FINAL) : Found spawner : /tp @p %d %d %d for worldseed %d\n",
 				spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ(), worldSeed);
+		File file = new File("PigSpawnerResult.txt");
+		try {
+			boolean ignored=file.createNewFile();
+			FileWriter writer=new FileWriter(file,true);
+			writer.write(String.format("STEP 3 (FINAL) : Found spawner : /tp @p %d %d %d for worldseed %d\n",
+					spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ(), worldSeed));
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
 	}
 }
