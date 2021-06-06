@@ -3,8 +3,6 @@ package PigSpawnerFinder;
 import PigSpawnerFinder.spiderfinder.*;
 import kaptainwutax.biomeutils.biome.Biomes;
 import kaptainwutax.biomeutils.source.OverworldBiomeSource;
-import kaptainwutax.featureutils.Feature;
-import kaptainwutax.featureutils.structure.Mineshaft;
 import kaptainwutax.mcutils.rand.ChunkRand;
 import kaptainwutax.mcutils.rand.seed.WorldSeed;
 import kaptainwutax.mcutils.util.pos.BPos;
@@ -15,11 +13,15 @@ import kaptainwutax.terrainutils.terrain.OverworldChunkGenerator;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 public class PigSpawnerFromWorldSeed {
-	public static final MCVersion version=MCVersion.v1_16_5;
+	public static final MCVersion version = MCVersion.v1_16_5;
+
 	// this is non optimized
 	public static void main(String[] args) {
 
@@ -44,7 +46,7 @@ public class PigSpawnerFromWorldSeed {
 			e.printStackTrace();
 			return;
 		}
-		System.out.printf("Searching an area of %dx%d chunks\n",size*2,size*2);
+		System.out.printf("Searching an area of %dx%d chunks\n", size * 2, size * 2);
 		for (int chunkX = -size; chunkX < size; chunkX++) {
 			int finalChunkX = chunkX;
 			long finalWorldSeed = worldSeed;
@@ -98,12 +100,12 @@ public class PigSpawnerFromWorldSeed {
 				if (piecesBeforeSpawner != 0) continue;
 
 				System.out.println("STEP 1: Spawner could work for : " + spawner);
-				findOutIfCorrect(worldSeed, spawner);
+				findOutIfCorrect(worldSeed, spawner, chunkX, chunkZ);
 			}
 		}
 	}
 
-	public static void findOutIfCorrect(long worldseed, Spawner spawner) {
+	public static void findOutIfCorrect(long worldseed, Spawner spawner, int chunkX, int chunkZ) {
 		ChunkRand rand = new ChunkRand();
 		// everything here can be handled with the structure seed only (the lower 48 bits)
 		long structureSeed = WorldSeed.toStructureSeed(worldseed);
@@ -184,7 +186,7 @@ public class PigSpawnerFromWorldSeed {
 
 		BPos spawnerPos = new BPos((spawnerChunkX << 4) + 9, spawner.y, (spawnerChunkZ << 4) + 9);
 		System.out.println("STEP 2: Spawner passed the buried treasure test : " + spawner);
-		processWorldSeed(worldseed, spawnerPos);
+		processWorldSeed(worldseed, spawnerPos, chunkX, chunkZ);
 
 	}
 
@@ -198,34 +200,15 @@ public class PigSpawnerFromWorldSeed {
 	}};
 
 
-	public static void processWorldSeed(long worldSeed, BPos spawnerPos) {
+	public static void processWorldSeed(long worldSeed, BPos spawnerPos, int chunkX, int chunkZ) {
 		OverworldBiomeSource biomeSource;
 		OverworldChunkGenerator chunkGenerator;
 		CPos spawnerChunkPos = spawnerPos.toChunkPos();
-		ChunkRand rand=new ChunkRand();
-		Mineshaft mineshaft=new Mineshaft(version);
-		List<CPos> mineshaftList =new ArrayList<>();
-				// mineshaft can go as far as 112 blocks so that would be 7 chunks
-		for (int offX = -7; offX <= 7; offX++) {
-			for (int offZ = -7; offZ <= 7; offZ++) {
-				CPos current=spawnerChunkPos.add(offX,offZ);
-				Feature.Data<?> data=mineshaft.at(current.getX(),current.getZ());
-				if (mineshaft.canStart(data,worldSeed,rand)){
-					mineshaftList.add(current);
-				}
-			}
-		}
-		if (mineshaftList.isEmpty())return;
+
 		//Check biomes
 		biomeSource = new OverworldBiomeSource(version, worldSeed);
 		// those two checks are super intensive, that's why we do it at last
-		boolean oneTrueAtLeast=false;
-		for (CPos mineshaftCPos:mineshaftList){
-			if (BADLANDS.contains(biomeSource.getBiomeForNoiseGen((mineshaftCPos.getX() << 2) + 2, 0, (mineshaftCPos.getZ() << 2) + 2).getId())){
-				oneTrueAtLeast=true;
-			}
-		}
-		if (!oneTrueAtLeast)return;
+		if (!BADLANDS.contains(biomeSource.getBiomeForNoiseGen((chunkX << 2) + 2, 0, (chunkZ << 2) + 2).getId())) return;
 		if (biomeSource.getBiomeForNoiseGen((spawnerChunkPos.getX() << 2) + 2, 0, (spawnerChunkPos.getZ() << 2) + 2) != Biomes.BEACH) return;
 //            System.out.println("Good biomes: " + worldSeed);
 
@@ -253,8 +236,8 @@ public class PigSpawnerFromWorldSeed {
 				spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ(), worldSeed);
 		File file = new File("PigSpawnerResult.txt");
 		try {
-			boolean ignored=file.createNewFile();
-			FileWriter writer=new FileWriter(file,true);
+			boolean ignored = file.createNewFile();
+			FileWriter writer = new FileWriter(file, true);
 			writer.write(String.format("STEP 3 (FINAL) : Found spawner : /tp @p %d %d %d for worldseed %d\n",
 					spawnerPos.getX(), spawnerPos.getY(), spawnerPos.getZ(), worldSeed));
 			writer.close();
