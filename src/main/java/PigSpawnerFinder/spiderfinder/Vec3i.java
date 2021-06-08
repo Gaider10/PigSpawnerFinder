@@ -1,4 +1,4 @@
-package andrew.spiderfinder;
+package PigSpawnerFinder.spiderfinder;
 
 import java.util.Objects;
 
